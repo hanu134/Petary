@@ -2,4 +2,14 @@
 
 body {
     font-family: 'Kosugi Maru', sans-serif;
+    padding-top: 100px;
+    padding-bottom: 90px;
+}
+
+.icon {
+    color: gray;
+}
+
+.paw {
+    font-size: 8em;
 }

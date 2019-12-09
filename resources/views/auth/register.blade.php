@@ -20,11 +20,11 @@
                 </div>
                 
                 <div class="form-group">
-                    {!! Form::password("pasword", ["class" => "form-control", "placeholder" => "パスワード"]) !!}
+                    {!! Form::password("password", ["class" => "form-control", "placeholder" => "パスワード"]) !!}
                 </div>
                 
                 <div class="form-group">
-                    {!! Form::password("pasword_confirmation", ["class" => "form-control", "placeholder" => "パスワード確認"]) !!}
+                    {!! Form::password("password_confirmation", ["class" => "form-control", "placeholder" => "パスワード確認"]) !!}
                 </div>
                 
                 <div class="text-center">
@@ -40,7 +40,7 @@
                 <div class="text-muted mt-4">
                     既にアカウントをお持ちの場合
                 </div>
-                <a href="#">ログイン</a>
+                {!! link_to_route("login", "ログイン") !!}
             </div>
         </div>
     </div>
