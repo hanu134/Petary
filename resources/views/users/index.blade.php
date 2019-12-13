@@ -1,15 +1,16 @@
 @extends("layouts.page")
 
-<header class="fixed-top mb-3">
-    <nav class="navbar navbar-light bg-light p-3">
-        <a href="http://2165fca39035409d8d52b5e54b0de824.vfs.cloud9.us-east-1.amazonaws.com/logout"><i class="fas fa-sign-out-alt fa-flip-horizontal fa-2x icon"></i></a>
-        <span class=" mx-auto navbar-text navbar-right username">{{ $user->name }}</span>
-        <i class="fas fa-edit fa-2x icon"></i>
-
-    </nav>
-</header>
-
 @section("content")
+    <div class="row">
+        <header class="fixed-top mb-3">
+            <nav class="navbar bg-light p-3 justify-content-around">
+                <a href="http://2165fca39035409d8d52b5e54b0de824.vfs.cloud9.us-east-1.amazonaws.com/logout"><i class="fas fa-sign-out-alt fa-flip-horizontal fa-2x icon"></i></a>
+                <span class="navbar-text username">{{ $user->name }}</span>
+                <i class="fas fa-edit fa-2x icon"></i>
+            </nav>
+        </header>
+    </div>
+
     @if ($errors->any())
     <div class="alert alert-danger">
         <ul>
@@ -22,7 +23,7 @@
     
     <div class="row justify-content-center">
         <div class="col-10">
-            
+
             {!! Form::open(["action" => "PostsController@store", "method" => "POST", "enctype" => "multipart/form-data"]) !!}
                 <div class="form-group text-center">
                     {!! Form::textarea("content", old("content"), ["class" => "form-control", "rows" => "2"]) !!}

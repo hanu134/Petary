@@ -11,7 +11,7 @@
                     
                     <div class="d-flex justify-content-around flex-wrap">
                         @foreach ($post->items as $item)
-                        <p><img src="{{ $item->path }}" alt=""></p>
+                        <p><img src="{{ asset('/storage/img/'.$item->path) }}"></p>
                         @endforeach
                     </div>
                 </div>

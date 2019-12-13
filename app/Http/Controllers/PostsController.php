@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Post;
 use App\Http\Requests\PostsRequest;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Intervention\Image\ImageManagerStatic as Image;
+
 
 class PostsController extends Controller
 {
@@ -28,45 +30,39 @@ class PostsController extends Controller
     
     public function store(Request $request)
     {
-        
-        /**
-        $this->validate($request, [
-            'content' => 'required|max:191',
-        ]);
-        
-
-        $request->user()->posts()->create([
-            'content' => $request->content,
-        ]);
-        */
-        
         if ($request->isMethod("POST")) {
             
             $post = Post::create(["content"=> $request->content, "user_id"=> \Auth::id()]);
-        
+            $time = time();
             
             //投稿画像を保存する。（最大4ファイル）
             
-            foreach ($request->file("files") as $index=> $e) {
-                $ext = $e->guessExtension();
-                $filename = time()."_{$index}.{$ext}";
-                // Intervention Imageを使ってイメージ加工
-                $img = Image::make($e);
-                // アップロードした画像が回転して表示されるのを解決
+            foreach ($request->file("files") as $index=> $image_file) {
+                
+                // $path = $image_file->store("public/img");
+                
+
+                  // Intervention Imageを使ってイメージ加工
+                $img = Image::make($image_file);
+                //  // アップロードした画像が回転して表示されるのを解決
                 $img->orientate();
-                // イメージリサイズ。横幅を指定。高さは自動調整
+                  // イメージリサイズ。横幅を指定。高さは自動調整
                 $width = 250;
                 $img->resize($width, null, function($constraint){
                                 $constraint->aspectRatio();
-                        });
-                $path = "/post/photos/" . $filename;
-                $img->save(public_path() . $path);
+                          });
                 
-                $post->items()->create(["path"=> $path]);
+                // $img->save(public_path() . $path);
+                $ext = $image_file->guessExtension();
+                $filename = $time."_{$index}.{$ext}";  
+                $path = "img/" . $filename;
+                Storage::disk("public")->put($path, $img->encode());
+                
+                $post->items()->create(["path"=> basename($path)]);
             }
             
             return back()->with(["flash_message"=> "投稿しました"]);
-        } 
+        }
         
         return back();
         
@@ -78,7 +74,6 @@ class PostsController extends Controller
 
         if (\Auth::id() === $post->user_id) {
             $post->delete();
-            
         }
 
         return back();
