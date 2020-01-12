@@ -13,26 +13,23 @@ class PostsController extends Controller
 {
     public function index()
     {
-        dd("index");
-        
-        $posts = Post::all();
-        
-        return view("posts.index", compact("posts"));
+
     }
-    
-    /**
-     * 投稿データを保存する 
-     */
+
     public function create(PostsRequest $request)
     {
 
     }
-    
+        
+    /**
+     * 投稿データを保存する 
+     */
     public function store(Request $request)
     {
         if ($request->isMethod("POST")) {
             
             $post = Post::create(["content"=> $request->content, "user_id"=> \Auth::id()]);
+            
             $time = time();
             
             //投稿画像を保存する。（最大4ファイル）
@@ -42,11 +39,11 @@ class PostsController extends Controller
                 // $path = $image_file->store("public/img");
                 
 
-                  // Intervention Imageを使ってイメージ加工
+                // Intervention Imageを使ってイメージ加工
                 $img = Image::make($image_file);
-                //  // アップロードした画像が回転して表示されるのを解決
+                // アップロードした画像が回転して表示されるのを解決
                 $img->orientate();
-                  // イメージリサイズ。横幅を指定。高さは自動調整
+                // イメージリサイズ。横幅を指定。高さは自動調整
                 $width = 250;
                 $img->resize($width, null, function($constraint){
                                 $constraint->aspectRatio();
@@ -56,7 +53,7 @@ class PostsController extends Controller
                 $ext = $image_file->guessExtension();
                 $filename = $time."_{$index}.{$ext}";  
                 $path = "img/" . $filename;
-                Storage::disk("public")->put($path, $img->encode());
+                Storage::disk("s3")->put($path, $img->encode());
                 
                 $post->items()->create(["path"=> basename($path)]);
             }
@@ -75,7 +72,33 @@ class PostsController extends Controller
         if (\Auth::id() === $post->user_id) {
             $post->delete();
         }
-
-        return back();
+        
+        // sessionからリダイレクト先を取得(タイムライン・投稿・お気に入り)
+        return redirect(session("backUrl"));
+    }
+    
+    public function show($id)
+    {
+        $post = Post::find($id);
+        return view("posts.detail")->with("post", $post);
+    }
+    
+    public function postrank()
+    {
+        $data = [];
+        if (\Auth::check()) {
+            $user = \Auth::user();
+            $posts = Post::where("favorites_count", ">", "0")->orderBy("favorites_count", "desc")->paginate(20);
+        
+            $data = [
+                "user" => $user,
+                "posts" => $posts,
+            ];
+        }
+        
+        // 投稿を削除した後のリダイレクト先をsessionに保存
+        session(["backUrl" => request()->path()]);
+        
+        return view("ranking.post", $data);
     }
 }

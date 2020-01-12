@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePostsTable extends Migration
+class CreateFavoritesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,16 @@ class CreatePostsTable extends Migration
      */
     public function up()
     {
-        Schema::create('posts', function (Blueprint $table) {
+        Schema::create('favorites', function (Blueprint $table) {
             $table->increments('id');
             $table->integer("user_id")->unsigned()->index();
-            $table->string("content");
-            $table->integer("favorites_count")->default(0);
+            $table->integer("post_id")->unsigned()->index();
             $table->timestamps();
-            $table->foreign('user_id')->references('id')->on('users');
+            
+            $table->foreign("user_id")->references("id")->on("users")->onDelete("cascade");
+            $table->foreign("post_id")->references("id")->on("posts")->onDelete("cascade");
+            
+            $table->unique(["user_id", "post_id"]);
         });
     }
 
@@ -30,6 +33,6 @@ class CreatePostsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('posts');
+        Schema::dropIfExists('favorites');
     }
 }

@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\User;
+
+use App\Post;
+
 class UsersController extends Controller
 {
     /**
@@ -13,21 +17,9 @@ class UsersController extends Controller
      */
     public function index()
     {
-        $data = [];
-        
-        if (\Auth::check()) {
-            $user = \Auth::user();
-            $posts = $user->posts()->orderBy("created_at", "desc")->paginate(100);
-            
-            $data = [
-                "user" => $user,
-                "posts" => $posts,
-            ];
-            
-            $data += $this->counts($user);
-        }
-        
-        return view("users.index", $data);
+        return redirect()->action(
+            "UsersController@show", ["id" => \Auth::id()]
+        );
     }
 
     /**
@@ -59,11 +51,24 @@ class UsersController extends Controller
      */
     public function show($id)
     {
-        $user = User::find($id);
+        $data = [];
         
-        return view("users.index",[
-           "user" => $user 
-        ]);
+        if (\Auth::check()) {
+            $user = User::find($id);
+            $posts = $user->posts()->orderBy("created_at", "desc")->paginate(100);
+            
+            $data = [
+                "user" => $user,
+                "posts" => $posts,
+            ];
+            
+            $data += $this->counts($user);
+        }
+        
+        // 投稿を削除した後のリダイレクト先をsessionに保存
+        session(["backUrl" => request()->path()]);
+        
+        return view("users.index", $data);
     }
 
     /**
@@ -74,7 +79,6 @@ class UsersController extends Controller
      */
     public function edit($id)
     {
-        //
     }
 
     /**
@@ -86,7 +90,7 @@ class UsersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        
     }
 
     /**
@@ -99,4 +103,91 @@ class UsersController extends Controller
     {
         //
     }
+
+    public function list()
+    {
+        $users = User::orderBy("id", "desc")->paginate(100);
+        
+        return view("users.list", [
+            "users" => $users,
+        ]);
+    }
+    
+    public function followings($id)
+    {
+        $user = User::find($id);
+        $followings = $user->followings()->paginate(100);
+        
+        $data = [
+            "user" => $user,
+            "users" => $followings,
+        ];
+        
+        $data += $this->counts($user);
+        
+        return view("users.followings", $data);
+    }
+    
+    public function followers($id)
+    {
+        $user = User::find($id);
+        $followers = $user->followers()->paginate(100);
+        
+        $data = [
+            "user" => $user,
+            "users" => $followers,
+        ];
+        
+        $data += $this->counts($user);
+        
+        return view("users.followers", $data);
+    }
+    
+    public function timeline()
+    {
+        $data = [];
+        if (\Auth::check()) {
+            $user = \Auth::user();
+            $posts = $user->feed_posts()->orderBy("created_at", "desc")->paginate(100);
+        
+            $data = [
+                "user" => $user,
+                "posts" => $posts,
+            ];
+        }
+        
+        // 投稿を削除した後のリダイレクト先をsessionに保存
+        session(["backUrl" => request()->path()]);
+        
+        return view("users.timeline", $data);
+    }
+    
+    public function favorites($id)
+    {
+        $user = User::find($id);
+        $favorites = $user->favorites()->paginate(100);
+        
+        $data = [
+            "user" => $user,
+            "posts" => $favorites,
+        ];
+        
+        $data += $this->counts($user);
+        
+        // 投稿を削除した後のリダイレクト先をsessionに保存
+        session(["backUrl" => request()->path()]);
+        
+        return view("users.favorites", $data);
+    }
+    
+    public function userrank()
+    {
+        $users = User::withCount("followers")->orderBy("followers_count", "desc")->paginate(100);
+        
+        
+        return view("ranking.user", [
+            "users" => $users,
+        ]);
+    }
 }
+

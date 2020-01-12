@@ -2,11 +2,13 @@
 
 body {
     font-family: 'Kosugi Maru', sans-serif;
-    padding-top: 100px;
+    padding-top: 90px;
     padding-bottom: 90px;
 }
 
-.icon {
+.icon,
+.h2,
+.username {
     color: gray;
 }
 
@@ -14,6 +16,20 @@ body {
     font-size: 8em;
 }
 
-.username {
+.username,
+.petary {
+    color: dimgray;
+}
+
+.post {
     font-size: 1.5em;
+}
+
+.comment {
+    font-size: 1.5em;
+    color: black;
+}
+
+.star {
+    color: yellow;
 }
