@@ -27,9 +27,14 @@ class PostsController extends Controller
     public function store(Request $request)
     {
         if ($request->isMethod("POST")) {
+            $this->validate($request,[
+                "content" => "required",
+                "files" => "required",
+            ]);
             
             $post = Post::create(["content"=> $request->content, "user_id"=> \Auth::id()]);
             
+
             $time = time();
             
             //投稿画像を保存する。（最大4ファイル）

@@ -20,6 +20,18 @@ Route::get('/', function () {
 //    return view('users.index');
 //});
 
+Route::get("users/{id}/followings/back", function($userId){
+    return redirect(session("backUrl"));
+})->name("followings.back");
+
+Route::get("users/{id}/followers/back", function($userId){
+    return redirect(session("backUrl"));
+})->name("followers.back");
+
+Route::get("detail/{id}/back", function($postId){
+    return redirect(session("backUrl"));
+})->name("detail.back");
+
 //  アカウント作成
 Route::get("signup", "Auth\RegisterController@showRegistrationForm")->name("signup.get");
 Route::post("signup", "Auth\RegisterController@register")->name("signup.post");
@@ -28,9 +40,6 @@ Route::post("signup", "Auth\RegisterController@register")->name("signup.post");
 Route::get("login", "Auth\LoginController@showLoginForm")->name("login");
 Route::post("login", "Auth\LoginController@login")->name("login.post");
 Route::get("logout", "Auth\LoginController@logout")->name("logout.get");
-
-Route::get("ranking/user", "UsersController@userrank")->name("ranking.user");
-Route::get("ranking/post", "PostsController@postrank")->name("ranking.post");
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get("users/list", "UsersController@list")->name("users.list");
@@ -43,6 +52,9 @@ Route::group(['middleware' => 'auth'], function () {
     
     Route::resource("comments", "CommentsController");
    
+    Route::get("ranking/user", "UsersController@userrank")->name("ranking.user");
+    Route::get("ranking/post", "PostsController@postrank")->name("ranking.post");
+
     Route::group(["prefix" => "users/{id}"], function () {
        Route::post("follow", "UserFollowController@store")->name("user.follow"); 
        Route::delete("unfollow", "UserFollowController@destroy")->name("user.unfollow");

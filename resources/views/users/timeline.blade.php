@@ -16,17 +16,6 @@
             </nav>
         </header>
     </div>
-
-    @if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-        @foreach ($errors->all() as $erroe)
-            <li>{{ $error }}</li>
-        @endforeach
-        </ul>
-    </div>
-    @endif
-    
     <div class="row justify-content-center">
         <div class="col-md-8 col-12">
             @if (count($posts) > 0)

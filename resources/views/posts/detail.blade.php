@@ -2,8 +2,10 @@
     
 @section("content")
 <header class="fixed-top mb-3">
-    <nav class="navbar bg-light p-3">
-        <a href="#" onclick="window.history.back(); return false;"><i class="far fa-hand-point-left fa-2x icon"></i></a>
+    <nav class="navbar bg-light p-3 justify-content-around">
+        <a href="{{ route('detail.back', ['id' => $post->id]) }}"><i class="far fa-hand-point-left fa-2x icon"></i></a>
+        <div></div>
+        <div></div>
     </nav>
 </header>
 
@@ -38,20 +40,25 @@
                                         <i class="far fa-star fa-stack-1x post"></i>
                                         <i class="fas fa-star fa-stack-1x star"></i>
                                     </span>
+                                    {{ $post->favorites_count }}
                                 </button>
+                                
                             {!! Form::close() !!}
                         @else
                             {!! Form::open(["route" => ["favorites.favorite", $post->id]]) !!}
                                 <button type="submit" class="btn" onfocus="this.blur();">
                                     <i class="far fa-star post faa-shake animated-hover"></i>
+                                    {{ $post->favorites_count }}
                                 </button>
+                                
                             {!! Form::close() !!}
                         @endif
                         
                         
-                        <a href="#" type="button" data-toggle="modal" data-target="#modal2">
-                            <i class="far fa-comment mt-2 comment"></i>
-                        </a>
+                        <button type="button" class="btn" onfocus="this.blur();" data-toggle="modal" data-target="#modal2">
+                            <i class="far fa-comment comment"></i>
+                            <span>{{ $post->comments->count() }}</span>
+                        </button>
                         @include("comments.comment")
                         
                     

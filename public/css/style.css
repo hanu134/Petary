@@ -17,12 +17,14 @@ body {
 }
 
 .username,
-.petary {
+.petary,
+.ranking {
     color: dimgray;
 }
 
 .post {
     font-size: 1.5em;
+    margin-top: 0;
 }
 
 .comment {
@@ -32,4 +34,5 @@ body {
 
 .star {
     color: yellow;
+    margin-top: 5px;
 }

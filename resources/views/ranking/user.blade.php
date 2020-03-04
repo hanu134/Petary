@@ -2,8 +2,8 @@
     
 @section("content")
         <header class="fixed-top mb-3">
-            <nav class="navbar bg-light p-3">
-                <a href="#" onclick="window.history.back(); return false;"><i class="far fa-hand-point-left fa-2x icon"></i></a>
+            <nav class="navbar bg-light p-3 justify-content-around">
+                <h2 class="ranking">ランキング</h2>
             </nav>
         </header>
         
@@ -30,7 +30,8 @@
                     <div>
                         <h5 class="mb-0 pl-2 ">{!! link_to_route('users.show', $user->name, ['id' => $user->id]) !!}</h5>
                     </div>
-                    <div>
+                    <div class="ml-3">
+                        {{ $user->followers()->count() }}人がフォロー中
                     </div>
                     <div class="text-right">
                         @include("user_follow.follow_button", ["user" => $user])

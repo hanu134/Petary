@@ -2,8 +2,10 @@
     
 @section("content")
         <header class="fixed-top mb-3">
-            <nav class="navbar bg-light p-3">
-                <a href="#" onclick="window.history.back(); return false;"><i class="far fa-hand-point-left fa-2x icon"></i></a>
+            <nav class="navbar bg-light p-3 justify-content-around">
+                <a href="{{ route('followers.back', ["id" => $user->id]) }}"><i class="far fa-hand-point-left fa-2x icon"></i></a>
+                <div></div>
+                <div></div>
             </nav>
         </header>
         

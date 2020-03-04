@@ -22,25 +22,30 @@
                 <div class="d-flex row justify-content-around">
                     @if (Auth::user()->is_favorite($post->id))
                         {!! Form::open(["route" => ["favorites.unfavorite", $post->id], "method" => "delete"]) !!}
-                            <button type="submit" class="btn" onfocus="this.blur();">
+                            <button type="submit" class="btn d-flex" onfocus="this.blur();">
                                 <span class="fa-stack">
                                     <i class="far fa-star fa-stack-1x post"></i>
                                     <i class="fas fa-star fa-stack-1x star"></i>
                                 </span>
+                                <span class="ml-2">{{ $post->favorites_count }}</span>
                             </button>
-                            {{ $post->favorites_count }}
+                            
                         {!! Form::close() !!}
                     @else
                         {!! Form::open(["route" => ["favorites.favorite", $post->id]]) !!}
-                            <button type="submit" class="btn" onfocus="this.blur();">
+                            <button type="submit" class="btn d-flex" onfocus="this.blur();">
                                 <i class="far fa-star post faa-shake animated-hover"></i>
+                                <span class="ml-2">{{ $post->favorites_count }}</span>
                             </button>
-                            {{ $post->favorites_count }}
+                            
                         {!! Form::close() !!}
                     @endif
-                        <a href="#" type="button" data-toggle="modal" data-target="#modal2">
-                            <i class="far fa-comment mt-2 comment"></i>
-                        </a>
+                        <button type="button" class="btn d-flex" onfocus="this.blur();" data-toggle="modal" data-target="#modal2">
+                            <span class="fa-stack">
+                            <i class="far fa-comment comment"></i>
+                            </span>
+                            <span class="ml-2">{{ $post->comments->count() }}</span>
+                        </button>
                     @include("comments.comment")
                     
                     {{ link_to("/posts/{$post->id}", '詳細', array('class' => 'btn')) }}

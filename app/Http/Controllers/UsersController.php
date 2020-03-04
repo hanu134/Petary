@@ -182,9 +182,8 @@ class UsersController extends Controller
     
     public function userrank()
     {
-        $users = User::withCount("followers")->orderBy("followers_count", "desc")->paginate(100);
-        
-        
+        $users = User::withCount("followers")->orderBy("followers_count", "desc")->paginate(20);
+
         return view("ranking.user", [
             "users" => $users,
         ]);

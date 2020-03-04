@@ -8,6 +8,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
+
       <div class="modal-body">
             {!! Form::open(["action" => "PostsController@store", "method" => "POST", "enctype" => "multipart/form-data"]) !!}
         <div class="form-group text-center">

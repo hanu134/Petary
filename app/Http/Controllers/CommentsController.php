@@ -4,18 +4,18 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Http\Requests;
 use App\User;
-
 use App\Post;
-
 use App\Comment;
+use Auth;
 
 class CommentsController extends Controller
 {
     public function store(Request $request)
     {
         $this->validate($request,[
-            "comment" => "required|max:191",
+            "comment" => "required",
             ]);
         
         $post_id = $request->post_id;

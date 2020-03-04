@@ -23,6 +23,11 @@ class Post extends Model
         return $this->hasMany(Comment::class);
     }
     
+    public function comment_by()
+    {
+        return Favorite::where("post_id", $this->id)->where("user_id", \Auth::user()->id)->first();
+    }
+
     public function favorites()
     {
         return $this->hasMany("App\Favorite");
